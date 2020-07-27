@@ -5,4 +5,4 @@ ignore/**
 **/__pycache__
 
 #ignore JetBrains .idea folder
-.idea/**
+.idea
