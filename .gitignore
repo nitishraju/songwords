@@ -3,3 +3,6 @@ ignore/**
 
 #ignore __pycache__
 **/__pycache__
+
+#ignore JetBrains .idea folder
+.idea/**

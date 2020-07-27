@@ -10,16 +10,12 @@ app = Flask(__name__)
 def index():
         return render_template('index.html')
 
-@app.route('/hello/')
-def hello():
-    return 'Welcome, person!<h1>Hello World</h1>'
-
 @app.route('/login/')
 def login():
     load_dotenv()
     try:
-        spotify_object = SpotifyClient(scope='user-read-playback-state')
-        auth_redirect = spotify_object.get_auth_redirect()
+        spotify = SpotifyClient(scope='user-read-playback-state')
+        auth_redirect = spotify.get_auth_redirect()
         return redirect(auth_redirect.url)
 
     except:
@@ -32,15 +28,15 @@ def logged_in():
         os.environ['AUTH_CODE'] = request.args.get('code')
         if os.environ.get('AUTH_CODE') is None:
             print('Warning! Authentication code not received.')
-        spotify_object = SpotifyClient(scope='user-read-playback-state')
-        spotify_object.get_and_set_tokens(os.environ.get('AUTH_CODE'))
+        spotify = SpotifyClient(scope='user-read-playback-state')
+        spotify.get_and_set_tokens(os.environ.get('AUTH_CODE'))
 
-    spotify_object = SpotifyClient(scope='user-read-playback-state')
+    spotify = SpotifyClient(scope='user-read-playback-state')
 
-    song_name, artist_name = spotify_object.currently_playing_info()
+    song_name, artist_name = spotify.currently_playing_info()
 
-    genius_object = GeniusClient(os.environ.get('GENIUS_TOKEN'))
-    song_lyrics = genius_object.get_lyrics(song_name, artist_name)
+    genius = GeniusClient(os.environ.get('GENIUS_TOKEN'))
+    song_lyrics = genius.get_lyrics(song_name, artist_name)
 
     return render_template('login_success.html', song_name=song_name, artist_name=artist_name, lyrics=song_lyrics)
 
