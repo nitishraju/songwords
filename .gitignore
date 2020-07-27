@@ -1,1 +1,2 @@
-.env
+#ignore file on local machine to store environment variables
+ignore/**

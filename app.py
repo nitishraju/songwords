@@ -45,4 +45,5 @@ def logged_in():
     return render_template('login_success.html', song_name=song_name, artist_name=artist_name, lyrics=song_lyrics)
 
 if __name__ == '__main__':
+    load_dotenv()
     app.run()
