@@ -6,3 +6,6 @@ ignore/**
 
 #ignore JetBrains .idea folder
 .idea
+
+#ignore venv
+venv/
