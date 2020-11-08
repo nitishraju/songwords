@@ -41,7 +41,7 @@ class SpotifyClient:
             return auth_redirect
 
         except requests.exceptions.HTTPError:
-            print('Please recheck your initialization parameters.')
+            print('Please recheck your initialization parameters. (ID, scope, etc.)')
             sys.exit()
 
     def get_and_set_tokens(self, auth_code):
@@ -65,14 +65,17 @@ class SpotifyClient:
             print('Access and refresh token set.')
 
     def refresh_access_token(self):
+        #format credentials for POST request
         client_creds = '{0}:{1}'.format(*self.get_id_and_secret())
 
+        #POST request for refresh token
         data = {'refresh_token': self.get_refresh_token(),
                 'grant_type': 'refresh_token'}
         headers = {'Authorization': 'Basic {}'.format(base64.urlsafe_b64encode(client_creds.encode()).decode())}
         response = requests.post('https://accounts.spotify.com/api/token', data=data, headers=headers)
 
         if response.status_code == requests.codes.ok:
+            #set refresh token
             os.environ['SPOTIFY_TOKEN'] = response.json()['access_token']
             print('Refreshed access token.')
         else:
@@ -80,10 +83,12 @@ class SpotifyClient:
             print('The access token expired.')
 
     def currently_playing_info(self):
+        #GET request for current song info
         self.refresh_access_token()
         headers = {'Authorization': 'Bearer ' + self.get_access_token()}
         song_response = requests.get('https://api.spotify.com/v1/me/player/currently-playing', headers=headers)
 
+        #parse song info response for song and artist names
         song_name = song_response.json()['item']['name']
         artist_name = song_response.json()['item']['artists'][0]['name']
         return song_name, artist_name

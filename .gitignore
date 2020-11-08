@@ -1,4 +1,4 @@
-#ignore file on local machine to store environment variables
+#ignore local data folder
 ignore/**
 
 #ignore __pycache__
